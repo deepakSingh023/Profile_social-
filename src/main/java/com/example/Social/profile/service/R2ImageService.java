@@ -20,20 +20,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class R2ImageService {
 
-    @Value("${cloudflare.r2.bucket-name}")
-    private String bucketName;
-
     @Value("${cloudflare.r2.access-key}")
     private String accessKey;
 
     @Value("${cloudflare.r2.secret-key}")
     private String secretKey;
 
+    @Value("${cloudflare.r2.bucket-name}")
+    private String bucketName;
+
     @Value("${cloudflare.r2.public-base-url}")
     private String publicUrl;
 
     @Value("${cloudflare.r2.endpoint}")
     private String endpoint;
+
 
     private S3Client r2Client;
 
