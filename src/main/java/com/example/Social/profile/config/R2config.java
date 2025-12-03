@@ -16,13 +16,13 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class R2config {
 
-    @Value("${cloudflare.r2.accessKey}")
+    @Value("${cloudflare.r2.access-Key}")
     private String accessKey;
 
-    @Value("${cloudflare.r2.secretKey}")
+    @Value("${cloudflare.r2.secret-Key}")
     private String secretKey;
 
-    @Value("${cloudflare.r2.accountId}")
+    @Value("${cloudflare.r2.account-Id}")
     private String accountId;
 
     @Bean
