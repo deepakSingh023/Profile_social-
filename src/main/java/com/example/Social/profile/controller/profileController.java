@@ -5,12 +5,13 @@ import com.example.Social.profile.dto.updateCounters;
 import com.example.Social.profile.dto.updateProfile;
 import com.example.Social.profile.entity.profile;
 import com.example.Social.profile.service.profileService;
-import com.example.Social.profile.utils.jwtUtils;   // ✅ import your JWT util
+import com.example.Social.profile.utils.jwtUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -51,10 +52,11 @@ public class profileController {
     }
 
     // UPDATE profile fields (JWT required)
-    @PutMapping("/{userId}")
+    @PutMapping(value = "/update/{userId}", consumes = "multipart/form-data")
     public ResponseEntity<?> updateProfile(
             @PathVariable String userId,
-            @RequestBody updateProfile request,
+            @RequestPart("data") updateProfile request,
+            @RequestPart(value = "profilePic", required = false) MultipartFile profilePic,
             @RequestHeader("Authorization") String authHeader
     ) {
         String token = extractToken(authHeader);
@@ -68,9 +70,10 @@ public class profileController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to update this profile");
         }
 
-        profile profile = profileService.updateProfile(userId, request);
+        profile profile = profileService.updateProfile(userId, request, profilePic);
         return ResponseEntity.ok(profile);
     }
+
 
     // UPDATE counters (no JWT check)
     @PatchMapping("/{userId}/counters")
