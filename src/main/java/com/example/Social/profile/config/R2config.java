@@ -16,20 +16,19 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class R2config {
 
-    @Value("${cloudflare.r2.access-key}")
+    @Value("${cloudflare.r2.accessKey}")
     private String accessKey;
 
-    @Value("${cloudflare.r2.secret-key}")
+    @Value("${cloudflare.r2.secretKey}")
     private String secretKey;
 
-    @Value("${cloudflare.r2.account-id}")
+    @Value("${cloudflare.r2.accountId}")
     private String accountId;
 
     @Bean
     public S3Client r2Client() {
 
-        // Cloudflare R2 endpoint format
-        String endpoint = "https://" + accountId + ".r2.cloudflarestorage.com";
+        String endpoint = String.format("https://%s.r2.cloudflarestorage.com", accountId);
 
         return S3Client.builder()
                 .credentialsProvider(
@@ -37,7 +36,7 @@ public class R2config {
                                 AwsBasicCredentials.create(accessKey, secretKey)
                         )
                 )
-                .region(Region.US_EAST_1) // R2 requires this dummy AWS region
+                .region(Region.US_EAST_1)
                 .endpointOverride(URI.create(endpoint))
                 .serviceConfiguration(
                         S3Configuration.builder()
