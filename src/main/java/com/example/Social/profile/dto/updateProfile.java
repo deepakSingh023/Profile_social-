@@ -7,11 +7,11 @@ import jakarta.validation.constraints.Size;
 public class updateProfile {
 
     @Size(max = 500, message = "Bio must be at most 150 characters")
-    private String Bio;
+    private String bio;
 
-    private String ProfilePicUrl;
+    private String profilePicUrl;
 
-    private Boolean PrivateAcc;
+    private Boolean privateAcc;
 }
 
 

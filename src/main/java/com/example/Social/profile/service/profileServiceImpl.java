@@ -7,9 +7,11 @@ import com.example.Social.profile.entity.profile;
 import com.example.Social.profile.repository.ProfileRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +30,12 @@ public class profileServiceImpl implements profileService {
 
     public profile fetchProfile(String userId) {
         return profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Profile not found for userId: " + userId));
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Profile not found for userId: " + userId
+                        )
+                );
     }
 
     @Transactional

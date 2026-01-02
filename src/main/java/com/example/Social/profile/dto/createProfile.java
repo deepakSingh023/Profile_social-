@@ -7,9 +7,9 @@ import lombok.*;
 public class createProfile {
 
 
-    private String Username;
+    private String username;
 
-    private String UserId;
+    private String userId;
 
-    private String Email;
+    private String email;
 }

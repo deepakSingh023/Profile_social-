@@ -6,23 +6,23 @@ import lombok.*;
 
 public class fetchProfile {
 
-    private String UserId;
+    private String userId;
 
-    private String Username;
+    private String username;
 
-    private String Bio;
+    private String bio;
 
-    private String Email;
+    private String email;
 
-    private String ProfilePicUrl;
+    private String profilePicUrl;
 
-    private Boolean PrivateAcc;
+    private Boolean privateAcc;
 
-    private  int FollowerCount;
+    private  int followerCount;
 
-    private  int FollowingCount;
+    private  int followingCount;
 
-    private  int FriendsCount;
+    private  int friendsCount;
 
 
 
