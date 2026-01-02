@@ -38,9 +38,12 @@ public class profileController {
     ) {
         String token = extractToken(authHeader);
 
-        if (!jwtValidator.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+        if (token == null || !jwtValidator.validateToken(token)) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Missing or invalid token");
         }
+
 
         UUID userIdFromToken = jwtValidator.extractUserId(token);
         if (!userIdFromToken.toString().equals(userId)) {
@@ -61,8 +64,10 @@ public class profileController {
     ) {
         String token = extractToken(authHeader);
 
-        if (!jwtValidator.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+        if (token == null || !jwtValidator.validateToken(token)) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Missing or invalid token");
         }
 
         UUID userIdFromToken = jwtValidator.extractUserId(token);
