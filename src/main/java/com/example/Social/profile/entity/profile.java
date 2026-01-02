@@ -20,32 +20,32 @@ import lombok.NoArgsConstructor;
 public class profile {
 
     @Id
-    private String Id;
+    private String id;
 
-    private String UserId;
+    private String userId;
 
-    private String Username;
+    private String username;
 
-    private String Email;
-
-    @Builder.Default
-    private String ProfilePicUrl="";
+    private String email;
 
     @Builder.Default
-    private String Bio="";
+    private String profilePicUrl="";
 
     @Builder.Default
-    private Boolean PrivateAcc=false;
-
+    private String bio="";
 
     @Builder.Default
-    private int FollowerCount=0;
+    private Boolean privateAcc=false;
 
 
     @Builder.Default
-    private int FollowingCount=0;
+    private int followerCount=0;
+
 
     @Builder.Default
-    private int FriendsCount=0;
+    private int followingCount=0;
+
+    @Builder.Default
+    private int friendsCount=0;
 
 }
