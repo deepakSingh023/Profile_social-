@@ -8,11 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface profileService {
 
-    profile createProfile(createProfile data);
 
     profile updateProfile(String userId, updateProfile data, MultipartFile newPic);
 
-    profile fetchProfile(String userId);
+    profile fetchOrCreateProfile(createProfile data);
 
     profile updateCounters(String userId , updateCounters data);
 

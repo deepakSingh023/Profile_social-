@@ -20,22 +20,15 @@ public class profileServiceImpl implements profileService {
     private final ProfileRepository profileRepository;
     private final R2ImageService r2ImageService;  // ✅ inject R2 service
 
-    public profile createProfile(createProfile data) {
-        profile profile = new profile();
-        profile.setUserId(data.getUserId());
-        profile.setEmail(data.getEmail());
-        profile.setUsername(data.getUsername());
-        return profileRepository.save(profile);
-    }
-
-    public profile fetchProfile(String userId) {
-        return profileRepository.findByUserId(userId)
-                .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "Profile not found for userId: " + userId
-                        )
-                );
+    public profile fetchOrCreateProfile(createProfile data) {
+        return profileRepository.findByUserId(data.getUserId())
+                .orElseGet(() -> {
+                    profile p = new profile();
+                    p.setUserId(data.getUserId());
+                    p.setUsername(data.getUsername());
+                    p.setEmail(data.getEmail());
+                    return profileRepository.save(p);
+                });
     }
 
     @Transactional

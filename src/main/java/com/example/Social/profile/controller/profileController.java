@@ -24,16 +24,9 @@ public class profileController {
     private final jwtUtils jwtValidator;
 
     // CREATE profile (no JWT check)
-    @PostMapping("/create-profile")
-    public ResponseEntity<profile> createProfile(@RequestBody createProfile request) {
-        profile profile = profileService.createProfile(request);
-        return ResponseEntity.ok(profile);
-    }
-
-    // FETCH profile by userId (JWT required)
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> fetchProfile(
-            @PathVariable String userId,
+    @PostMapping("/fetch-or-create")
+    public ResponseEntity<?> fetchOrCreateProfile(
+            @RequestBody createProfile request,
             @RequestHeader("Authorization") String authHeader
     ) {
         String token = extractToken(authHeader);
@@ -44,13 +37,14 @@ public class profileController {
                     .body("Missing or invalid token");
         }
 
-
         UUID userIdFromToken = jwtValidator.extractUserId(token);
-        if (!userIdFromToken.toString().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to access this profile");
+        if (!userIdFromToken.toString().equals(request.getUserId())) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body("Not allowed to access this profile");
         }
 
-        profile profile = profileService.fetchProfile(userId);
+        profile profile = profileService.fetchOrCreateProfile(request);
         return ResponseEntity.ok(profile);
     }
 
