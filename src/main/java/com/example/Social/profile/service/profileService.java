@@ -8,13 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface profileService {
 
-
     profile updateProfile(String userId, updateProfile data, MultipartFile newPic);
 
-    profile fetchOrCreateProfile(createProfile data);
+    // ✅ change method to accept userId from token
+    profile fetchOrCreateProfile(createProfile data, String userIdFromToken);
 
-    profile updateCounters(String userId , updateCounters data);
-
-
-
+    profile updateCounters(String userId, updateCounters data);
 }

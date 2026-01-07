@@ -23,7 +23,6 @@ public class profileController {
     private final profileService profileService;
     private final jwtUtils jwtValidator;
 
-    // CREATE profile (no JWT check)
     @PostMapping("/fetch-or-create")
     public ResponseEntity<?> fetchOrCreateProfile(
             @RequestBody createProfile request,
@@ -38,15 +37,12 @@ public class profileController {
         }
 
         UUID userIdFromToken = jwtValidator.extractUserId(token);
-        if (!userIdFromToken.toString().equals(request.getUserId())) {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body("Not allowed to access this profile");
-        }
 
-        profile profile = profileService.fetchOrCreateProfile(request);
+        profile profile = profileService.fetchOrCreateProfile(request, userIdFromToken.toString());
+
         return ResponseEntity.ok(profile);
     }
+
 
     // UPDATE profile fields (JWT required)
     @PutMapping(value = "/update/{userId}", consumes = "multipart/form-data")

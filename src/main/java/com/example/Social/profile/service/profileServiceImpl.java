@@ -20,16 +20,18 @@ public class profileServiceImpl implements profileService {
     private final ProfileRepository profileRepository;
     private final R2ImageService r2ImageService;  // ✅ inject R2 service
 
-    public profile fetchOrCreateProfile(createProfile data) {
-        return profileRepository.findByUserId(data.getUserId())
+    @Override
+    public profile fetchOrCreateProfile(createProfile data, String userIdFromToken) {
+        return profileRepository.findByUserId(userIdFromToken)
                 .orElseGet(() -> {
                     profile p = new profile();
-                    p.setUserId(data.getUserId());
+                    p.setUserId(userIdFromToken);
                     p.setUsername(data.getUsername());
                     p.setEmail(data.getEmail());
                     return profileRepository.save(p);
                 });
     }
+
 
     @Transactional
     public profile updateProfile(String userId, updateProfile data, MultipartFile newPic) {
