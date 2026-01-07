@@ -20,11 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class R2ImageService {
 
-    @Value("${cloudflare.r2.access-key}")
-    private String accessKey;
-
-    @Value("${cloudflare.r2.secret-key}")
-    private String secretKey;
+    private final S3Client r2Client; // ✅ injected
 
     @Value("${cloudflare.r2.bucket-name}")
     private String bucketName;
@@ -32,42 +28,26 @@ public class R2ImageService {
     @Value("${cloudflare.r2.public-base-url}")
     private String publicUrl;
 
-    @Value("${cloudflare.r2.endpoint}")
-    private String endpoint;
-
-
-    private S3Client r2Client;
-
-    @PostConstruct
-    public void init() {
-        r2Client = S3Client.builder()
-                .credentialsProvider(
-                        StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(accessKey, secretKey)
-                        )
-                )
-                .region(Region.US_EAST_1) // required by AWS SDK
-                .endpointOverride(URI.create(endpoint))
-                .build();
-    }
-
     public String uploadProfilePic(MultipartFile file) {
         try {
-            String key = "profile_pics/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+            String key = "profile_pics/" +
+                    UUID.randomUUID() + "-" +
+                    file.getOriginalFilename();
 
             r2Client.putObject(
                     PutObjectRequest.builder()
                             .bucket(bucketName)
-                            .contentType(file.getContentType())
                             .key(key)
+                            .contentType(file.getContentType())
                             .build(),
                     RequestBody.fromBytes(file.getBytes())
             );
 
+            // ✅ THIS URL MUST BE r2.dev
             return publicUrl + "/" + key;
 
         } catch (Exception e) {
-            throw new RuntimeException("Upload failed: " + e.getMessage());
+            throw new RuntimeException("Upload failed", e);
         }
     }
 
@@ -83,7 +63,6 @@ public class R2ImageService {
                             .key(key)
                             .build()
             );
-
         } catch (Exception e) {
             System.out.println("Delete failed: " + e.getMessage());
         }
