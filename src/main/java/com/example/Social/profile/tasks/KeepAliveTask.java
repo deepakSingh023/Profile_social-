@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class KeepAliveTask {
 
-    private static final String PING_URL = "https://profile-social-1.onrender.com/api/health";
+    private static final String PING_URL = "https://profile-social-cokq.onrender.com/api/health";
 
     private final RestTemplate restTemplate = new RestTemplate();
 
