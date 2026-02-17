@@ -5,11 +5,12 @@ import com.example.Social.profile.dto.updateCounters;
 import com.example.Social.profile.dto.updateProfile;
 import com.example.Social.profile.entity.profile;
 import com.example.Social.profile.service.profileService;
-import com.example.Social.profile.utils.jwtUtils;
+
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,50 +22,31 @@ import java.util.UUID;
 public class profileController {
 
     private final profileService profileService;
-    private final jwtUtils jwtValidator;
 
     @PostMapping("/fetch-or-create")
     public ResponseEntity<?> fetchOrCreateProfile(
             @RequestBody createProfile request,
-            @RequestHeader("Authorization") String authHeader
+            Authentication auth
     ) {
-        String token = extractToken(authHeader);
 
-        if (token == null || !jwtValidator.validateToken(token)) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body("Missing or invalid token");
-        }
+        String userId = auth.getName();
 
-        UUID userIdFromToken = jwtValidator.extractUserId(token);
 
-        profile profile = profileService.fetchOrCreateProfile(request, userIdFromToken.toString());
+        profile profile = profileService.fetchOrCreateProfile(request, userId);
 
         return ResponseEntity.ok(profile);
     }
 
 
     // UPDATE profile fields (JWT required)
-    @PutMapping(value = "/update/{userId}", consumes = "multipart/form-data")
+    @PutMapping(value = "/update", consumes = "multipart/form-data")
     public ResponseEntity<?> updateProfile(
-            @PathVariable String userId,
             @RequestPart("data") updateProfile request,
             @RequestPart(value = "profilePic", required = false) MultipartFile profilePic,
-            @RequestHeader("Authorization") String authHeader
+            Authentication auth
     ) {
-        String token = extractToken(authHeader);
 
-        if (token == null || !jwtValidator.validateToken(token)) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body("Missing or invalid token");
-        }
-
-        UUID userIdFromToken = jwtValidator.extractUserId(token);
-        if (!userIdFromToken.toString().equals(userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed to update this profile");
-        }
-
+        String userId = auth.getName();
         profile profile = profileService.updateProfile(userId, request, profilePic);
         return ResponseEntity.ok(profile);
     }
@@ -80,11 +62,4 @@ public class profileController {
         return ResponseEntity.ok(profile);
     }
 
-    // ✅ Helper: Extract Bearer token
-    private String extractToken(String authHeader) {
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
-        }
-        return null;
-    }
 }
