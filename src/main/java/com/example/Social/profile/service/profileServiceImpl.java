@@ -4,6 +4,7 @@ import com.example.Social.profile.dto.createProfile;
 import com.example.Social.profile.dto.updateCounters;
 import com.example.Social.profile.dto.updateProfile;
 import com.example.Social.profile.entity.profile;
+import com.example.Social.profile.exceptions.ProfileNotFound;
 import com.example.Social.profile.repository.ProfileRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class profileServiceImpl implements profileService {
     public profile updateProfile(String userId, updateProfile data, MultipartFile newPic) {
 
         profile profile = profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
+                .orElseThrow(() -> new ProfileNotFound("Profile not found"));
 
         if (data.getBio() != null) {
             profile.setBio(data.getBio());
@@ -63,7 +64,7 @@ public class profileServiceImpl implements profileService {
     @Transactional
     public profile updateCounters(String userId, updateCounters data) {
         profile profile = profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
+                .orElseThrow(() -> new ProfileNotFound("Profile not found"));
 
         if (data.getFollowerCount() != null) {
             profile.setFollowerCount(profile.getFollowerCount() + data.getFollowerCount());
