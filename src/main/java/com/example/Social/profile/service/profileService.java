@@ -10,8 +10,7 @@ public interface profileService {
 
     profile updateProfile(String userId, updateProfile data, MultipartFile newPic);
 
-    // ✅ change method to accept userId from token
-    profile fetchOrCreateProfile(createProfile data, String userIdFromToken);
+    profile fetchOrCreateProfile(createProfile data, String userId);
 
     profile updateCounters(String userId, updateCounters data);
 }

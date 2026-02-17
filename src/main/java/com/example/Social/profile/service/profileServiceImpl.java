@@ -7,6 +7,7 @@ import com.example.Social.profile.entity.profile;
 import com.example.Social.profile.exceptions.ProfileNotFound;
 import com.example.Social.profile.repository.ProfileRepository;
 
+import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,19 +20,26 @@ import org.springframework.web.server.ResponseStatusException;
 public class profileServiceImpl implements profileService {
 
     private final ProfileRepository profileRepository;
-    private final R2ImageService r2ImageService;  // ✅ inject R2 service
+    private final R2ImageService r2ImageService;
 
     @Override
-    public profile fetchOrCreateProfile(createProfile data, String userIdFromToken) {
-        return profileRepository.findByUserId(userIdFromToken)
+    public profile fetchOrCreateProfile(createProfile data, String userId) {
+
+        return profileRepository.findByUserId(userId)
                 .orElseGet(() -> {
-                    profile p = new profile();
-                    p.setUserId(userIdFromToken);
-                    p.setUsername(data.getUsername());
-                    p.setEmail(data.getEmail());
-                    return profileRepository.save(p);
+                    try {
+                        profile p = new profile();
+                        p.setUserId(userId);
+                        p.setUsername(data.getUsername());
+                        p.setEmail(data.getEmail());
+                        return profileRepository.save(p);
+                    } catch (DuplicateKeyException e) {
+                        return profileRepository.findByUserId(userId)
+                                .orElseThrow();
+                    }
                 });
     }
+
 
 
     @Transactional
