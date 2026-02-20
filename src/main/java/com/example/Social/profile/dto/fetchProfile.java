@@ -3,7 +3,7 @@ import lombok.*;
 
 
 @Data
-
+@AllArgsConstructor
 public class fetchProfile {
 
     private String userId;

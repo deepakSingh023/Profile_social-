@@ -1,6 +1,7 @@
 package com.example.Social.profile.service;
 
 import com.example.Social.profile.dto.createProfile;
+import com.example.Social.profile.dto.fetchProfile;
 import com.example.Social.profile.dto.updateCounters;
 import com.example.Social.profile.dto.updateProfile;
 import com.example.Social.profile.entity.profile;
@@ -85,5 +86,27 @@ public class profileServiceImpl implements profileService {
         }
 
         return profileRepository.save(profile);
+    }
+
+
+    @Override
+    public fetchProfile getProfile(String userId) {
+
+        profile data = profileRepository.findByUserId(userId)
+                .orElseThrow(()-> new ProfileNotFound("profile not found"));
+
+        fetchProfile res = new fetchProfile(
+                userId,
+                data.getUsername(),
+                data.getBio(),
+                data.getEmail(),
+                data.getProfilePicUrl(),
+                data.getPrivateAcc(),
+                data.getFollowerCount(),
+                data.getFollowingCount(),
+                data.getFriendsCount()
+        );
+
+        return res;
     }
 }

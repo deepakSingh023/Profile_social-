@@ -1,6 +1,7 @@
 package com.example.Social.profile.controller;
 
 import com.example.Social.profile.dto.createProfile;
+import com.example.Social.profile.dto.fetchProfile;
 import com.example.Social.profile.dto.updateCounters;
 import com.example.Social.profile.dto.updateProfile;
 import com.example.Social.profile.entity.profile;
@@ -60,6 +61,20 @@ public class profileController {
     ) {
         profile profile = profileService.updateCounters(userId, request);
         return ResponseEntity.ok(profile);
+    }
+
+
+    @PostMapping("/fetch-profile")
+    public ResponseEntity<fetchProfile> fetch(
+            Authentication auth
+    ){
+
+        String userId = auth.getName();
+
+        fetchProfile data = profileService.getProfile(userId);
+
+        return ResponseEntity.ok(data);
+
     }
 
 }
