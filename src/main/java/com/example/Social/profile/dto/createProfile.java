@@ -6,7 +6,6 @@ import lombok.*;
 @Data
 public class createProfile {
 
-
     private String username;
 
     private String email;

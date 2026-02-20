@@ -17,13 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/profiles")   // All routes start with /api/profiles
+@RequestMapping("/api/profile")   // All routes start with /api/profiles
 @RequiredArgsConstructor
 public class profileController {
 
     private final profileService profileService;
 
-    @PostMapping("/fetch-or-create")
+    @PostMapping("/create")
     public ResponseEntity<?> fetchOrCreateProfile(
             @RequestBody createProfile request,
             Authentication auth
