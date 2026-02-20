@@ -9,4 +9,6 @@ public class createProfile {
     private String username;
 
     private String email;
+
+    private String userId;
 }

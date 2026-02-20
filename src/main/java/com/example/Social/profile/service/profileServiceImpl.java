@@ -24,18 +24,18 @@ public class profileServiceImpl implements profileService {
     private final R2ImageService r2ImageService;
 
     @Override
-    public profile fetchOrCreateProfile(createProfile data, String userId) {
+    public profile fetchOrCreateProfile(createProfile data) {
 
-        return profileRepository.findByUserId(userId)
+        return profileRepository.findByUserId(data.getUserId())
                 .orElseGet(() -> {
                     try {
                         profile p = new profile();
-                        p.setUserId(userId);
+                        p.setUserId(data.getUserId());
                         p.setUsername(data.getUsername());
                         p.setEmail(data.getEmail());
                         return profileRepository.save(p);
                     } catch (DuplicateKeyException e) {
-                        return profileRepository.findByUserId(userId)
+                        return profileRepository.findByUserId(data.getUserId())
                                 .orElseThrow();
                     }
                 });

@@ -11,7 +11,7 @@ public interface profileService {
 
     profile updateProfile(String userId, updateProfile data, MultipartFile newPic);
 
-    profile fetchOrCreateProfile(createProfile data, String userId);
+    profile fetchOrCreateProfile(createProfile data);
 
     profile updateCounters(String userId, updateCounters data);
 

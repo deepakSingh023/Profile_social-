@@ -26,14 +26,9 @@ public class profileController {
 
     @PostMapping("/create")
     public ResponseEntity<?> fetchOrCreateProfile(
-            @RequestBody createProfile request,
-            Authentication auth
+            @RequestBody createProfile request
     ) {
-
-        String userId = auth.getName();
-
-
-        profile profile = profileService.fetchOrCreateProfile(request, userId);
+        profile profile = profileService.fetchOrCreateProfile(request);
 
         return ResponseEntity.ok(profile);
     }
