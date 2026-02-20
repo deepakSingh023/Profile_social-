@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/profile")   // All routes start with /api/profiles
+@RequestMapping("/api/profiles")   // All routes start with /api/profiles
 @RequiredArgsConstructor
 public class profileController {
 
