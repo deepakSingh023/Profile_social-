@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.List;
 
-@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;

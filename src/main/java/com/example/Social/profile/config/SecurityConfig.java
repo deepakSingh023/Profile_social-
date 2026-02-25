@@ -1,6 +1,9 @@
 package com.example.Social.profile.config;
 
+import com.example.Social.profile.filter.InternalFilter;
 import com.example.Social.profile.filter.JwtAuthenticationFilter;
+import com.example.Social.profile.utils.JwtUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -19,7 +22,18 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtUtils jwtUtils){
+        return new JwtAuthenticationFilter(jwtUtils);
+    }
+
+    @Bean
+    public InternalFilter internalFilter(@Value("${secret.service}") String localSecret){
+        return new InternalFilter(localSecret);
+
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter, InternalFilter internalFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -27,9 +41,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/health/**",
                                 "/api/profiles/create").permitAll()
+                        .requestMatchers("/api/controller/counter").permitAll()
                         .anyRequest().authenticated()
                 );
 
+        http.addFilterBefore(internalFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 

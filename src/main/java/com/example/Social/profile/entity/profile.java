@@ -41,13 +41,13 @@ public class profile {
 
 
     @Builder.Default
-    private int followerCount=0;
+    private long followerCount=0;
 
 
     @Builder.Default
-    private int followingCount=0;
+    private long followingCount=0;
 
     @Builder.Default
-    private int friendsCount=0;
+    private long friendsCount=0;
 
 }

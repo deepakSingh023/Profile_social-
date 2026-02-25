@@ -2,20 +2,16 @@ package com.example.Social.profile.controller;
 
 import com.example.Social.profile.dto.createProfile;
 import com.example.Social.profile.dto.fetchProfile;
-import com.example.Social.profile.dto.updateCounters;
 import com.example.Social.profile.dto.updateProfile;
 import com.example.Social.profile.entity.profile;
 import com.example.Social.profile.service.profileService;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/profiles")   // All routes start with /api/profiles
@@ -48,15 +44,6 @@ public class profileController {
     }
 
 
-    // UPDATE counters (no JWT check)
-    @PatchMapping("/{userId}/counters")
-    public ResponseEntity<profile> updateCounters(
-            @PathVariable String userId,
-            @RequestBody updateCounters request
-    ) {
-        profile profile = profileService.updateCounters(userId, request);
-        return ResponseEntity.ok(profile);
-    }
 
 
     @PostMapping("/fetch-profile")

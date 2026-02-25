@@ -1,8 +1,8 @@
 package com.example.Social.profile.service;
 
+import com.example.Social.profile.dto.DenormalizeDto;
 import com.example.Social.profile.dto.createProfile;
 import com.example.Social.profile.dto.fetchProfile;
-import com.example.Social.profile.dto.updateCounters;
 import com.example.Social.profile.dto.updateProfile;
 import com.example.Social.profile.entity.profile;
 import com.example.Social.profile.exceptions.ProfileNotFound;
@@ -10,11 +10,12 @@ import com.example.Social.profile.repository.ProfileRepository;
 
 import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,14 @@ public class profileServiceImpl implements profileService {
 
     private final ProfileRepository profileRepository;
     private final R2ImageService r2ImageService;
+    private final MongoTemplate mongoTemplate;
+    private final DenormalizeService denormalizeService;
+
+    public  static final Logger log = LoggerFactory.getLogger(profileServiceImpl.class);
+
+
+
+
 
     @Override
     public profile fetchOrCreateProfile(createProfile data) {
@@ -67,22 +76,16 @@ public class profileServiceImpl implements profileService {
             profile.setProfilePicUrl(newUrl);
         }
 
-        return profileRepository.save(profile);
-    }
+        DenormalizeDto denorm = new DenormalizeDto(
+                userId,
+                profile.getProfilePicUrl()
+        );
 
-    @Transactional
-    public profile updateCounters(String userId, updateCounters data) {
-        profile profile = profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new ProfileNotFound("Profile not found"));
+        try{
+            denormalizeService.denormalize(denorm);
 
-        if (data.getFollowerCount() != null) {
-            profile.setFollowerCount(profile.getFollowerCount() + data.getFollowerCount());
-        }
-        if (data.getFollowingCount() != null) {
-            profile.setFollowingCount(profile.getFollowingCount() + data.getFollowingCount());
-        }
-        if (data.getFriendsCount() != null) {
-            profile.setFriendsCount(profile.getFriendsCount() + data.getFriendsCount());
+        }catch (Exception ex){
+            log.info("denormalize of the image in reel and post service failed  ex={} userId={}",ex,userId);
         }
 
         return profileRepository.save(profile);

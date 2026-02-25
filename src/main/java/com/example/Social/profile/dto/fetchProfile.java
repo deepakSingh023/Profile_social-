@@ -18,11 +18,11 @@ public class fetchProfile {
 
     private Boolean privateAcc;
 
-    private  int followerCount;
+    private  long followerCount;
 
-    private  int followingCount;
+    private  long followingCount;
 
-    private  int friendsCount;
+    private  long friendsCount;
 
 
 
