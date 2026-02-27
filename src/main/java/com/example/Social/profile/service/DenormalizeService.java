@@ -2,6 +2,7 @@ package com.example.Social.profile.service;
 
 
 import com.example.Social.profile.dto.DenormalizeDto;
+import com.example.Social.profile.tasks.InteractionClient;
 import com.example.Social.profile.tasks.PostClient;
 import com.example.Social.profile.tasks.ReelClient;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ public class DenormalizeService {
 
     private final PostClient postClient;
     private final ReelClient reelClient;
+    private final InteractionClient interactionClient;
 
     @Value("${secret.service}")
     private String secret;
@@ -24,6 +26,9 @@ public class DenormalizeService {
         postClient.denormalizePost(data,secret);
 
         reelClient.denormalize(data,secret);
+
+        interactionClient.denormalize(data,secret);
+
 
     }
 }
