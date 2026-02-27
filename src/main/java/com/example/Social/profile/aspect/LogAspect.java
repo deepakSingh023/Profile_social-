@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Order(3)
 public class LogAspect {
 
-    Logger log = LoggerFactory.getLogger(LogAspect.class);
+    private final static Logger log = LoggerFactory.getLogger(LogAspect.class);
 
 
     @Around("execution(* com.example.Social.profile.controller..*(..))")
