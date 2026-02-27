@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@org.springframework.cloud.openfeign.FeignClient(name="denormalize", url="${post.uri}")
+@org.springframework.cloud.openfeign.FeignClient(name="denormalizePost", url="${post.uri}")
 public interface PostClient {
 
     @PutMapping("/api/denormalize/avatar")

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name="denormalize", url="${interaction.uri}")
+@FeignClient(name="denormalizeInteraction", url="${interaction.uri}")
 public interface InteractionClient {
 
     @PutMapping("/api/interaction/denormalize")

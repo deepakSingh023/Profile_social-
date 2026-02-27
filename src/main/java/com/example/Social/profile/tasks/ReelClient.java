@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name="denormalize", url="${reel.uri}")
+@FeignClient(name="denormalizeReel", url="${reel.uri}")
 public interface ReelClient {
 
     @PutMapping("/api/reel/denormalize")
