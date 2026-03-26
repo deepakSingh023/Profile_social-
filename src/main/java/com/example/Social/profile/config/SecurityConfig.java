@@ -39,8 +39,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/health/**",
-                                "/api/profiles/create").permitAll()
+                        .requestMatchers("/api/health/**").permitAll()
+                        .requestMatchers("/api/profiles/create").permitAll()
                         .requestMatchers("/api/controller/counter").permitAll()
                         .anyRequest().authenticated()
                 );
@@ -57,7 +57,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(List.of("http://localhost:3000",
-                "https://profile-social-cokq.onrender.com",
+                "https://profile-social-1-vf2s.onrender.com ",
                 "https://auth-social-1.onrender.com"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
