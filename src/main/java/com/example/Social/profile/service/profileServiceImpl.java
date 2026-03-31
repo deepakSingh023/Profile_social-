@@ -54,41 +54,44 @@ public class profileServiceImpl implements profileService {
 
     @Transactional
     public profile updateProfile(String userId, updateProfile data, MultipartFile newPic) {
+        long start = System.currentTimeMillis();
 
+        long t1 = System.currentTimeMillis();
         profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ProfileNotFound("Profile not found"));
+        log.info("find profile took {} ms", System.currentTimeMillis() - t1);
 
-        if (data.getBio() != null) {
-            profile.setBio(data.getBio());
-        }
+        if (data.getBio() != null) profile.setBio(data.getBio());
+        if (data.getPrivateAcc() != null) profile.setPrivateAcc(data.getPrivateAcc());
 
-        if (data.getPrivateAcc() != null) {
-            profile.setPrivateAcc(data.getPrivateAcc());
-        }
+        String oldUrl = profile.getProfilePicUrl();
 
         if (newPic != null && !newPic.isEmpty()) {
-
-            if (profile.getProfilePicUrl() != null && !profile.getProfilePicUrl().isEmpty()) {
-                r2ImageService.deleteImage(profile.getProfilePicUrl());
-            }
-
+            long t2 = System.currentTimeMillis();
             String newUrl = r2ImageService.uploadProfilePic(newPic);
+            log.info("uploadProfilePic took {} ms", System.currentTimeMillis() - t2);
             profile.setProfilePicUrl(newUrl);
         }
 
-        DenormalizeDto denorm = new DenormalizeDto(
-                userId,
-                profile.getProfilePicUrl()
-        );
+        long t3 = System.currentTimeMillis();
+        profile saved = profileRepository.save(profile);
+        log.info("save profile took {} ms", System.currentTimeMillis() - t3);
 
-        try{
+        if (newPic != null && !newPic.isEmpty()) {
+            DenormalizeDto denorm = new DenormalizeDto(userId, saved.getProfilePicUrl());
             denormalizeService.denormalize(denorm);
 
-        }catch (Exception ex){
-            log.info("denormalize of the image in reel and post service failed  ex={} userId={}",ex,userId);
+            if (oldUrl != null && !oldUrl.isEmpty()) {
+                try {
+                    denormalizeService.deleteOldImageAsync(oldUrl);
+                } catch (Exception e) {
+                    log.warn("Failed to delete old image oldUrl={}", oldUrl, e);
+                }
+            }
         }
 
-        return profileRepository.save(profile);
+        log.info("total updateProfile took {} ms", System.currentTimeMillis() - start);
+        return saved;
     }
 
 
