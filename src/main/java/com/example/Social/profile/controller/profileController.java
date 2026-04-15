@@ -1,5 +1,6 @@
 package com.example.Social.profile.controller;
 
+import com.example.Social.profile.dto.InternalProfile;
 import com.example.Social.profile.dto.createProfile;
 import com.example.Social.profile.dto.fetchProfile;
 import com.example.Social.profile.dto.updateProfile;
@@ -58,5 +59,21 @@ public class profileController {
         return ResponseEntity.ok(data);
 
     }
+
+
+    @GetMapping("/get/profile-stuff/{userId}")
+    public ResponseEntity<InternalProfile> getInternalData(
+
+            @PathVariable String userId
+
+    ){
+
+        InternalProfile res = profileService.getInternal(userId);
+
+        return ResponseEntity.ok(res);
+    }
+
+
+
 
 }

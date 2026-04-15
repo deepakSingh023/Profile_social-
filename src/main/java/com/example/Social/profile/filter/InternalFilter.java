@@ -20,7 +20,8 @@ public class InternalFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
 
         return ! (uri.startsWith("/api/controller/counter")||
-                uri.startsWith("/api/profiles/create"));
+                uri.startsWith("/api/profiles/create") ||
+                uri.startsWith("/api/profiles/get/profile-stuff"));
 
     }
 

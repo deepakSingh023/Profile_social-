@@ -1,9 +1,6 @@
 package com.example.Social.profile.service;
 
-import com.example.Social.profile.dto.DenormalizeDto;
-import com.example.Social.profile.dto.createProfile;
-import com.example.Social.profile.dto.fetchProfile;
-import com.example.Social.profile.dto.updateProfile;
+import com.example.Social.profile.dto.*;
 import com.example.Social.profile.entity.profile;
 import com.example.Social.profile.exceptions.ProfileNotFound;
 import com.example.Social.profile.repository.ProfileRepository;
@@ -114,5 +111,13 @@ public class profileServiceImpl implements profileService {
         );
 
         return res;
+    }
+
+    @Override
+    public InternalProfile getInternal(String userId){
+       profile pro =  profileRepository.findByUserId(userId)
+               .orElseThrow(() -> new ProfileNotFound("this profile does not exist"));
+
+       return new InternalProfile(pro.getUsername(),pro.getProfilePicUrl());
     }
 }

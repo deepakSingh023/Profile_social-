@@ -1,5 +1,6 @@
 package com.example.Social.profile.service;
 
+import com.example.Social.profile.dto.InternalProfile;
 import com.example.Social.profile.dto.createProfile;
 import com.example.Social.profile.dto.fetchProfile;
 import com.example.Social.profile.dto.updateProfile;
@@ -14,6 +15,8 @@ public interface profileService {
 
 
     fetchProfile getProfile(String userId);
+
+    InternalProfile getInternal(String userId);
 
 
 }
