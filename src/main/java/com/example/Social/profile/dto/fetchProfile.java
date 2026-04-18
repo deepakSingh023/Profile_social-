@@ -18,6 +18,10 @@ public class fetchProfile {
 
     private Boolean privateAcc;
 
+    private long reels;
+
+    private long posts;
+
     private  long followerCount;
 
     private  long followingCount;

@@ -105,6 +105,8 @@ public class profileServiceImpl implements profileService {
                 data.getEmail(),
                 data.getProfilePicUrl(),
                 data.getPrivateAcc(),
+                data.getReels(),
+                data.getPosts(),
                 data.getFollowerCount(),
                 data.getFollowingCount(),
                 data.getFriendsCount()

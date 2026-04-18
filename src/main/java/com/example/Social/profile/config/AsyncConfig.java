@@ -29,4 +29,20 @@ public class AsyncConfig {
 
         return thread;
     }
+
+    @Bean(name="update-profile")
+    public Executor ProfileNumberExecutor(){
+
+        ThreadPoolTaskExecutor thread = new ThreadPoolTaskExecutor();
+        thread.setCorePoolSize(10);
+        thread.setMaxPoolSize(20);
+        thread.setQueueCapacity(100);
+        thread.setThreadNamePrefix("-updateNumbers");
+        thread.setRejectedExecutionHandler(
+                new ThreadPoolExecutor.CallerRunsPolicy()
+        );
+        thread.initialize();
+
+        return thread;
+    }
 }

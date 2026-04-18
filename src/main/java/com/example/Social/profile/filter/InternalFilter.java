@@ -19,7 +19,7 @@ public class InternalFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request){
         String uri = request.getRequestURI();
 
-        return ! (uri.startsWith("/api/controller/counter")||
+        return ! (uri.startsWith("/api/controller/counter/")||
                 uri.startsWith("/api/profiles/create") ||
                 uri.startsWith("/api/profiles/get/profile-stuff"));
 

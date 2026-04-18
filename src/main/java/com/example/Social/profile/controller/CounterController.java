@@ -1,6 +1,7 @@
 package com.example.Social.profile.controller;
 
 
+import com.example.Social.profile.dto.ReelUpdate;
 import com.example.Social.profile.dto.UpdateCounter;
 import com.example.Social.profile.service.CounterService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,29 @@ public class CounterController {
         );
 
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PutMapping("/reel-number")
+    public ResponseEntity<Void> updateReelCount(
+            @RequestBody ReelUpdate data
+            ){
+
+        counterService.updateReelNumber(data.userId(), data.num());
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PutMapping("/post-number")
+    public ResponseEntity<Void> updatePostCount(
+            @RequestBody ReelUpdate data
+    ){
+
+        counterService.updatePostNumber(data.userId(), data.num());
+
+        return ResponseEntity.noContent().build();
+
     }
 
 }

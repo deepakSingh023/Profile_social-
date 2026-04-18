@@ -39,6 +39,12 @@ public class profile {
     @Builder.Default
     private Boolean privateAcc=false;
 
+    @Builder.Default
+    private long reels=0;
+
+    @Builder.Default
+    private long posts=0;
+
 
     @Builder.Default
     private long followerCount=0;
