@@ -2,6 +2,7 @@ package com.example.Social.profile.service;
 
 
 import com.example.Social.profile.dto.DenormalizeDto;
+import com.example.Social.profile.tasks.CommentsClient;
 import com.example.Social.profile.tasks.InteractionClient;
 import com.example.Social.profile.tasks.PostClient;
 import com.example.Social.profile.tasks.ReelClient;
@@ -21,6 +22,7 @@ public class DenormalizeService {
     private final ReelClient reelClient;
     private final InteractionClient interactionClient;
     private final R2ImageService r2ImageService;
+    private final CommentsClient commentsClient;
 
     private static final Logger log = LoggerFactory.getLogger(DenormalizeService.class);
 
@@ -34,6 +36,7 @@ public class DenormalizeService {
             postClient.denormalizePost(data, secret);
             reelClient.denormalize(data, secret);
             interactionClient.denormalize(data, secret);
+            commentsClient.denormalizePost(data,secret);
         } catch (Exception ex) {
             log.error("denormalize failed userId={}",data.userId(), ex);
         }
