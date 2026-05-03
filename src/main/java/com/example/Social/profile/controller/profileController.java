@@ -1,10 +1,8 @@
 package com.example.Social.profile.controller;
 
-import com.example.Social.profile.dto.InternalProfile;
-import com.example.Social.profile.dto.createProfile;
-import com.example.Social.profile.dto.fetchProfile;
-import com.example.Social.profile.dto.updateProfile;
+import com.example.Social.profile.dto.*;
 import com.example.Social.profile.entity.profile;
+import com.example.Social.profile.service.ProfileDataFetchService;
 import com.example.Social.profile.service.profileService;
 
 
@@ -14,12 +12,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/profiles")   // All routes start with /api/profiles
 @RequiredArgsConstructor
 public class profileController {
 
     private final profileService profileService;
+
+    private final ProfileDataFetchService profileDataFetchService;
 
     @PostMapping("/create")
     public ResponseEntity<?> fetchOrCreateProfile(
@@ -72,6 +75,15 @@ public class profileController {
 
         return ResponseEntity.ok(res);
     }
+
+
+    @PostMapping("/get/basic")
+    public ResponseEntity<Map<String, ProfileDto>> getProfiles(@RequestBody List<String> ids) {
+        return ResponseEntity.ok(profileDataFetchService.getProfiles(ids));
+    }
+
+
+
 
 
 
