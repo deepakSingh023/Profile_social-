@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/profiles/create").permitAll()
                         .requestMatchers("/api/controller/counter/**").permitAll()
                         .requestMatchers("/api/profiles/get/**").permitAll()
+                        .requestMatchers("/api/profile/search").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 );

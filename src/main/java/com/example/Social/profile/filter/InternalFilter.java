@@ -21,7 +21,8 @@ public class InternalFilter extends OncePerRequestFilter {
 
         return ! (uri.startsWith("/api/controller/counter/")||
                 uri.startsWith("/api/profiles/create") ||
-                uri.startsWith("/api/profiles/get"));
+                uri.startsWith("/api/profiles/get") ||
+                uri.startsWith("/api/profile/search"));
 
     }
 
