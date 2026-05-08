@@ -63,6 +63,16 @@ public class profileController {
 
     }
 
+    @GetMapping("/fetch-profile-else/{otherUserId}")
+    public ResponseEntity<FetchSomeoneProfile> fetchElse(
+            @PathVariable String otherUserId,
+            Authentication auth
+    ){
+        FetchSomeoneProfile res = profileService.fetchSomeoneElseProfile(auth.getName(), otherUserId);
+
+        return ResponseEntity.ok(res);
+    }
+
 
     @GetMapping("/get/profile-stuff/{userId}")
     public ResponseEntity<InternalProfile> getInternalData(

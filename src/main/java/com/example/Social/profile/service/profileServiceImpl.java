@@ -5,10 +5,12 @@ import com.example.Social.profile.entity.profile;
 import com.example.Social.profile.exceptions.ProfileNotFound;
 import com.example.Social.profile.repository.ProfileRepository;
 
+import com.example.Social.profile.tasks.InteractionClient;
 import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,13 @@ public class profileServiceImpl implements profileService {
     private final MongoTemplate mongoTemplate;
     private final DenormalizeService denormalizeService;
 
+    private final InteractionClient interactionClient;
+
     public  static final Logger log = LoggerFactory.getLogger(profileServiceImpl.class);
+
+
+    @Value("${secret.service}")
+    private String token;
 
 
 
@@ -113,6 +121,45 @@ public class profileServiceImpl implements profileService {
         );
 
         return res;
+    }
+
+    @Override
+    public FetchSomeoneProfile fetchSomeoneElseProfile(String userId, String profileOwnerId){
+
+        profile pro = profileRepository.findByUserId(profileOwnerId)
+                .orElseThrow(()-> new ProfileNotFound("profile not found"));
+
+        fetchProfile res = new fetchProfile(
+                pro.getUserId(),
+                pro.getUsername(),
+                pro.getBio(),
+                pro.getEmail(),
+                pro.getProfilePicUrl(),
+                pro.getPrivateAcc(),
+                pro.getReels(),
+                pro.getPosts(),
+                pro.getFollowerCount(),
+                pro.getFollowingCount(),
+                pro.getFriendsCount()
+        );
+
+        InteractionResponse res2;
+
+        try {
+            res2 = interactionClient.checkInteraction(
+                    new CheckInteraction(userId, profileOwnerId),
+                    token
+            );
+        } catch (Exception e) {
+
+            // optional log
+            log.error("Interaction service failed", e);
+
+            res2 = new InteractionResponse(false, false);
+        }
+
+        return new FetchSomeoneProfile(res,res2);
+
     }
 
     @Override
