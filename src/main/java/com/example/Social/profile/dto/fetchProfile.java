@@ -22,11 +22,11 @@ public class fetchProfile {
 
     private long posts;
 
-    private  long followerCount;
+    private  long followerCounter;
 
-    private  long followingCount;
+    private  long followingCounter;
 
-    private  long friendsCount;
+    private  long friendsCounter;
 
 
 
