@@ -115,9 +115,9 @@ public class profileServiceImpl implements profileService {
                 data.getPrivateAcc(),
                 data.getReels(),
                 data.getPosts(),
-                data.getFollowerCount(),
-                data.getFollowingCount(),
-                data.getFriendsCount()
+                data.getFollowerCounter(),
+                data.getFollowingCounter(),
+                data.getFriendsCounter()
         );
 
         return res;
@@ -138,9 +138,9 @@ public class profileServiceImpl implements profileService {
                 pro.getPrivateAcc(),
                 pro.getReels(),
                 pro.getPosts(),
-                pro.getFollowerCount(),
-                pro.getFollowingCount(),
-                pro.getFriendsCount()
+                pro.getFollowerCounter(),
+                pro.getFollowingCounter(),
+                pro.getFriendsCounter()
         );
 
         InteractionResponse res2;
