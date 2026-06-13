@@ -6,6 +6,8 @@ import com.example.Social.profile.tasks.CommentsClient;
 import com.example.Social.profile.tasks.InteractionClient;
 import com.example.Social.profile.tasks.PostClient;
 import com.example.Social.profile.tasks.ReelClient;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,29 +20,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class DenormalizeService {
 
-    private final PostClient postClient;
-    private final ReelClient reelClient;
-    private final InteractionClient interactionClient;
+
     private final R2ImageService r2ImageService;
-    private final CommentsClient commentsClient;
+
 
     private static final Logger log = LoggerFactory.getLogger(DenormalizeService.class);
 
     @Value("${secret.service}")
     private String secret;
 
+    private final DenormalizeWorker worker;
 
     @Async("denormalize")
     public void denormalize(DenormalizeDto data){
-        try {
-            postClient.denormalizePost(data, secret);
-            reelClient.denormalize(data, secret);
-            interactionClient.denormalize(data, secret);
-            commentsClient.denormalizePost(data,secret);
-        } catch (Exception ex) {
-            log.error("denormalize failed userId={}",data.userId(), ex);
-        }
+
+            worker.denormPost(data,secret);
+            worker.denormReel(data,secret);
+            worker.denormComment(data,secret);
+            worker.denormInteraction(data,secret);
+
     }
+
+
 
     @Async("denormalize")
     public void deleteOldImageAsync(String oldUrl) {
@@ -49,5 +50,15 @@ public class DenormalizeService {
         } catch (Exception e) {
             log.warn("delete old image failed oldUrl={}", oldUrl, e);
         }
+    }
+
+    public void fallback(
+            DenormalizeDto data,
+            Throwable ex
+    ){
+        log.error("profile creation failed after retries for user = {}",
+                data.userId(),
+                ex);
+
     }
 }
