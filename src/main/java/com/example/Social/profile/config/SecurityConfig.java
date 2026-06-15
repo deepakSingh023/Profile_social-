@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/profiles/get/**").permitAll()
                         .requestMatchers("/api/profile/search").permitAll()
                         .requestMatchers("/api/profiles/fetch-profile-else/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 );
