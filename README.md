@@ -24,15 +24,15 @@ The service provides APIs for profile management, profile search, internal profi
 
 ## Technology Stack
 
-* Java 21
+* Java 17
 * Spring Boot
 * Spring Security
-* Spring Data MongoDB
 * MongoDB
 * OpenFeign
 * Resilience4j
 * Cloudflare R2
 * Async Processing
+* Spring Aop
 
 ---
 
